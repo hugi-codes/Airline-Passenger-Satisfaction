@@ -1,3 +1,2 @@
 # Airline-Passenger-Satisfaction
-This repo is work in progress. It is the final project of the [Machine Learning Zoomcamp](https://github.com/DataTalksClub/machine-learning-zoomcamp) offered by [Data Talks Club](https://datatalks.club/). Please see my Machine Learning Zoomcamp 
-[repo](https://github.com/hugi-codes/Machine-Learning-Zoomcamp/tree/main) for information on the course syllabus and course homework.
+This repo is work in progress. It is the final project of the [Machine Learning Zoomcamp](https://github.com/DataTalksClub/machine-learning-zoomcamp) offered by [Data Talks Club](https://datatalks.club/). For more information on the expected deliverables, please see [this file](https://github.com/DataTalksClub/machine-learning-zoomcamp/tree/master/projects). Please see my Machine Learning Zoomcamp [repo](https://github.com/hugi-codes/Machine-Learning-Zoomcamp/tree/main) for information on the course syllabus and course homework.
