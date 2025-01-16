@@ -6,25 +6,24 @@
 # For more info on the project requirements, please check the links provided in README.md
 
 
-# %% [markdown]
+
 # ## Importing packages
 
-# %%
 import numpy as np
 import kagglehub
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# %% [markdown]
+
 # ## Loading the dataset
 
-# %%
+
 # Download latest version
 path = kagglehub.dataset_download("teejmahal20/airline-passenger-satisfaction")
 
 print("Path to dataset files:", path)
 
-# %%
+
 import pandas as pd
 
 # Path to the extracted dataset
@@ -34,14 +33,14 @@ file_path = '/home/timhug/.cache/kagglehub/datasets/teejmahal20/airline-passenge
 df = pd.read_csv(file_path)
 
 
-# %% [markdown]
+
 # ## Data Cleaning
 # 1)  Delete rows with missing values in Arrival Delay in Minutes column
 # 2)  Impute mean where 0_5 cols have value 0
 # 3)  Omitting outlier values 
 # 4)  Omitting columns not needed for modeling
 
-# %%
+
 # 1 Delete rows with missing values in Arrival Delay in Minutes column
 
 # This approach is chosen, as this leads only to a drop in 0.3% of the rows, which is acceptable. 
@@ -63,7 +62,7 @@ dropped_percentage = (dropped_row_count / original_row_count) * 100
 # Print the result
 print(f"Percentage of rows dropped: {dropped_percentage:.2f}%")
 
-# %%
+
 # 2. Impute mean where 0_5 cols have value 0
 
 # This approach has been chosen, as in Kaggle discussions about this dataset it is mentioned that 0 values for the
@@ -104,7 +103,6 @@ filtered_rows
 # This output just serves to see that the mean rounded to two decimals was imputed correctly, where previously the value was 0. 
 
 
-# %%
 # 3. Omitting Outliers in the columns "Departure Delay in Minutes" and "Arrival Delay in Minutes"
 
 # Only Outliers of these columns are omitted, as these are the only columns 
@@ -152,21 +150,21 @@ percentage_deleted = (rows_deleted / initial_rows) * 100
 print(f"Absolute number of rows deleted: {rows_deleted}")
 print(f"Percentage of rows deleted: {percentage_deleted:.2f}%")
 
-# %%
+
 # 4. Omitting columns not needed for modeling
 
 df_cleaned_4 = df_cleaned_3.drop(columns=['Unnamed: 0', 'id'])
 
-# %% [markdown]
+
 # ## Preprocessing
 # * Min Max Scaling (for later use of distance-based algos)
 # * One-hot encoding 
 # 
 
-# %%
+
 df_cleaned_4.info()
 
-# %%
+
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.feature_extraction import DictVectorizer
@@ -251,22 +249,9 @@ print("X_val_preprocessed:", X_val_preprocessed.shape)
 print("X_test_preprocessed:", X_test_preprocessed.shape)
 
 
-# In train.py, the fitted preprocessors (scaler and vectorizer) will be saved as pkl file to be reused!
 
-# %% [markdown]
-# ## Feature importance
-# * To select features to use in the modeling step
-
-# %%
-
-
-# %%
-
-
-# %% [markdown]
 # ## Modeling
 
-# %%
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
@@ -276,7 +261,7 @@ rf_model = RandomForestClassifier(random_state=42)
 
 # Step 2: Set up hyperparameter grid for tuning
 param_grid = {
-    'n_estimators': [200, 300],
+    'n_estimators': [50, 100],
     'max_depth': [10, 20],
     'min_samples_split': [5, 10]
 }
@@ -312,8 +297,6 @@ test_accuracy = accuracy_score(y_test, y_test_pred)
 
 print(f"Test Accuracy: {test_accuracy:.4f}")
 
-
-# %%
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
@@ -358,7 +341,7 @@ test_accuracy = accuracy_score(y_test, y_test_pred)
 
 print(f"Test Accuracy: {test_accuracy:.4f}")
 
-# %%
+
 # Getting the best model
 # Two algorithms were trained for which hyper parameters were tuned, respectively:
 # --> Random Forest
