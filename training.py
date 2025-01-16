@@ -391,11 +391,63 @@ print(f"Best Hyperparameters: {best_model['best_params']}")
 print(f"Test Accuracy: {best_model['test_accuracy']:.4f}")
 
 
-# Save the best model as a pickle file
-import pickle
 
-with open('best_model.pkl', 'wb') as f:
+# To make the best out of the entire available data (df_cleaned_4): 
+# * Split entire available data into feature matrix X and target y
+# * Refit min max scaler on entire data (not only on training split), save as pkl for later reuse (for new incoming data)
+# * Refit the one-hot encoder (dict vectorizer) on the entire data, save as pkl for later reuse (for new incoming data)
+# * Apply the fitted preprocessors to the entire data 
+# * Train the best model on the entire available(and preprocessed) data 
+# * Save the final model (trained on entire data) as pkl for later reuse
+
+import pickle
+import numpy as np
+
+# To make the best out of the entire available data (df_cleaned_4):
+# Step 1: Split entire available data into feature matrix X and target y
+X_all = df_cleaned_4.drop(columns=[target_column])  # Feature matrix
+y_all = df_cleaned_4[target_column]  # Target variable
+
+# Step 2: Fit the MinMaxScaler on the entire data (fit only)
+# Fit the scaler on the entire data (numerical columns only)
+scaler.fit(X_all[numerical_columns])
+
+# Save the fitted scaler for later reuse
+with open('scaler.pkl', 'wb') as f:
+    pickle.dump(scaler, f)
+
+print("Scaler fitted on entire data and saved as 'scaler.pkl'.")
+
+# Step 3: Transform the data using the fitted MinMaxScaler
+X_all_numerical_scaled = scaler.transform(X_all[numerical_columns])
+
+# Step 4: Fit the DictVectorizer on the entire data (fit only)
+# Convert categorical data to dictionary format for the vectorizer
+X_all_categorical_dict = X_all[categorical_columns].to_dict(orient='records')
+
+# Fit the vectorizer on the entire data
+vectorizer.fit(X_all_categorical_dict)
+
+# Save the fitted vectorizer for later reuse
+with open('vectorizer.pkl', 'wb') as f:
+    pickle.dump(vectorizer, f)
+
+print("DictVectorizer fitted on entire data and saved as 'vectorizer.pkl'.")
+
+# Step 5: Transform the data using the fitted DictVectorizer
+X_all_categorical_encoded = vectorizer.transform(X_all_categorical_dict)
+
+# Step 6: Apply the fitted preprocessors to the entire data
+# Combine the scaled numerical data with the encoded categorical data
+X_all_preprocessed = np.hstack([X_all_numerical_scaled, X_all_categorical_encoded])
+
+# Step 7: Train the best model on the entire available (and preprocessed) data
+# Train the best model (selected earlier in the script) on the preprocessed data
+best_model['model'].fit(X_all_preprocessed, y_all)
+
+# Step 8: Save the final model (trained on entire data) as pkl for later reuse
+with open('final_trained_model.pkl', 'wb') as f:
     pickle.dump(best_model['model'], f)
 
-print("Best model saved as 'best_model.pkl'.")
+print("Final model trained on entire data and saved as 'final_trained_model.pkl'.")
 
