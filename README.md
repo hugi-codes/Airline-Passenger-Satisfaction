@@ -6,8 +6,8 @@ This project focuses on analyzing airline passenger satisfaction based on a data
 
 The primary objective is to identify the key factors influencing passenger satisfaction and develop a classification model to predict whether a passenger is satisfied or neutral / dissatisfied. Insights from this analysis can help airlines improve service quality and enhance customer experiences.
 
-## Data 
-The Data is from Kaggle [link](https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction/data) and can be downloaded in Python using the kagglehub library. For an example of how do this, please check [notebook.ipynb](https://github.com/hugi-codes/Airline-Passenger-Satisfaction/blob/main/notebook.ipynb) or [training.py](https://github.com/hugi-codes/Airline-Passenger-Satisfaction/blob/main/training.py). 
+## 📊 Dataset
+The Data is from Kaggle ([link](https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction/data)) and can be downloaded in Python using the `kagglehub` library. For an example of how do this, please check [notebook.ipynb](https://github.com/hugi-codes/Airline-Passenger-Satisfaction/blob/main/notebook.ipynb) or [training.py](https://github.com/hugi-codes/Airline-Passenger-Satisfaction/blob/main/training.py). 
 
 Info on the features (copied from Kaggle):
 - **Gender**: Gender of the passengers (**Female**, **Male**)  
@@ -32,7 +32,7 @@ Info on the features (copied from Kaggle):
 - **Cleanliness**: Satisfaction level of cleanliness (**1-5**)  
 - **Departure Delay in Minutes**: Minutes delayed during departure  
 - **Arrival Delay in Minutes**: Minutes delayed during arrival  
-- **Satisfaction**: Airline satisfaction level (**Satisfaction**, **Neutral or Dissatisfaction**)  
+- **Satisfaction**: Airline satisfaction level. This is the target feature. (**Satisfaction**, **Neutral or Dissatisfaction**)  
 
 
 
