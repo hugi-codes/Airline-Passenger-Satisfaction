@@ -15,6 +15,7 @@ kaggle = "^1.6.17"
 kagglehub = "^0.3.6"
 seaborn = "^0.13.2"
 scikit-learn = "^1.6.1"
+flask = "^3.1.0"
 
 
 [tool.poetry.group.dev.dependencies]
