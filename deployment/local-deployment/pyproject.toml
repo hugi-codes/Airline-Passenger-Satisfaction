@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "airline-passenger-satisfaction"
+version = "0.1.0"
+description = ""
+authors = ["hugi-codes <mindthehug@googlemail.com>"]
+readme = "README.md"
+package-mode = false
+
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pandas = "^2.2.3"
+numpy = "^2.2.1"
+kaggle = "^1.6.17"
+kagglehub = "^0.3.6"
+seaborn = "^0.13.2"
+scikit-learn = "^1.6.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
