@@ -28,7 +28,7 @@ try:
         vectorizer = pickle.load(f)
 
     # Load the trained model
-    model_path = os.path.join(script_dir, 'final_trained_model.pkl')
+    model_path = os.path.join(script_dir, 'final_trained_model.pkl')  # 'final_trained_model.pkl', best_rf_model
     with open(model_path, 'rb') as f:
         model = pickle.load(f)
 
@@ -50,33 +50,42 @@ def preprocess_input(data):
     # Convert incoming data to a DataFrame
     df = pd.DataFrame([data])
 
-    # Vectorize categorical features
-    vectorized_data = vectorizer.transform(df.to_dict(orient='records'))
-    vectorized_df = pd.DataFrame(vectorized_data, columns=vectorizer.get_feature_names_out())
+    # Define the numerical and categorical columns
+    numerical_columns = [
+        'Age', 'Flight Distance', 'Inflight wifi service', 
+        'Departure/Arrival time convenient', 'Ease of Online booking', 
+        'Gate location', 'Food and drink', 'Online boarding', 
+        'Seat comfort', 'Inflight entertainment', 'On-board service', 
+        'Leg room service', 'Baggage handling', 'Checkin service', 
+        'Inflight service', 'Cleanliness', 'Departure Delay in Minutes', 
+        'Arrival Delay in Minutes'
+    ]
 
-    # Scale numerical features
-    numerical_columns =  ['Age', 'Flight Distance', 'Inflight wifi service', 
-                     'Departure/Arrival time convenient', 'Ease of Online booking', 
-                     'Gate location', 'Food and drink', 'Online boarding', 
-                     'Seat comfort', 'Inflight entertainment', 'On-board service', 
-                     'Leg room service', 'Baggage handling', 'Checkin service', 
-                     'Inflight service', 'Cleanliness', 'Departure Delay in Minutes', 
-                     'Arrival Delay in Minutes']
+    categorical_columns = [
+        'Gender', 'Customer Type', 'Type of Travel', 'Class'
+    ]
 
-    if len(numerical_columns) > 0:
-        try:
-            vectorized_df[numerical_columns] = scaler.transform(df[numerical_columns])
-        except Exception as e:
-            print("Error during scaling numerical columns:", e)
-            print("Numerical columns in input:", df[numerical_columns].columns.tolist())
-            print("Expected numerical columns:", numerical_columns)
+    # Converting numerical columns to numeric dtype
+    df[numerical_columns] = df[numerical_columns].apply(pd.to_numeric, errors='coerce')
 
+    # Convert categorical columns to 'category' dtype
+    df[categorical_columns] = df[categorical_columns].astype('category')
 
-    # Debug: Print preprocessed data
-    print("Preprocessed DataFrame:")
-    print(vectorized_df.head())
+    # Split the data into numerical and categorical features
+    numerical_data = df[numerical_columns]
+    categorical_data = df[categorical_columns]
 
-    return vectorized_df
+    # Preprocess the numerical data (apply scaling)
+    numerical_data_scaled = scaler.transform(numerical_data)
+
+    # Preprocess the categorical data (apply dictionary vectorization)
+    categorical_data_dict = categorical_data.to_dict(orient='records')  # Convert to list of dictionaries
+    categorical_data_vectorized = vectorizer.transform(categorical_data_dict)
+
+    # Stack the preprocessed data (numerical + categorical) horizontally
+    X_preprocessed = np.hstack([numerical_data_scaled, categorical_data_vectorized])
+
+    return X_preprocessed
 
 # Define the prediction endpoint
 @app.route('/predict', methods=['POST'])
@@ -94,6 +103,8 @@ def predict():
 
         # Preprocess the input
         preprocessed_data = preprocess_input(input_data)
+
+        print(preprocessed_data)
 
         # Make a prediction
         prediction = model.predict(preprocessed_data)
