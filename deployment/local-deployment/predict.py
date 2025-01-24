@@ -99,8 +99,11 @@ def predict():
         prediction = model.predict(preprocessed_data)
         prediction_proba = model.predict_proba(preprocessed_data)[:, 1][0]
 
-        # Map prediction to passenger satisfaction status
-        if prediction[0] == 1:
+        # Define a threshold (0.5 is the common default threshold for classification problems)
+        threshold = 0.4
+
+        # Map probability to satisfaction status based on the threshold
+        if prediction_proba >= threshold:
             result = "Passenger is satisfied"
         else:
             result = "Passenger is neutral or dissatisfied"
@@ -108,7 +111,8 @@ def predict():
         # Return the result
         return jsonify({
             'prediction': result,
-            'probability': prediction_proba
+            'probability': prediction_proba,
+            'threshold': threshold
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
