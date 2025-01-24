@@ -34,6 +34,7 @@ try:
 
     print("Model and preprocessors loaded successfully.")
 
+
 except FileNotFoundError as e:
     print(f"File not found: {e}")
     raise
@@ -54,12 +55,26 @@ def preprocess_input(data):
     vectorized_df = pd.DataFrame(vectorized_data, columns=vectorizer.get_feature_names_out())
 
     # Scale numerical features
-    numerical_columns = ['numerical_feature1', 'numerical_feature2']  # Replace with actual column names
-    if len(numerical_columns) > 0:
-        vectorized_df[numerical_columns] = scaler.transform(vectorized_df[numerical_columns])
+    numerical_columns =  ['Age', 'Flight Distance', 'Inflight wifi service', 
+                     'Departure/Arrival time convenient', 'Ease of Online booking', 
+                     'Gate location', 'Food and drink', 'Online boarding', 
+                     'Seat comfort', 'Inflight entertainment', 'On-board service', 
+                     'Leg room service', 'Baggage handling', 'Checkin service', 
+                     'Inflight service', 'Cleanliness', 'Departure Delay in Minutes', 
+                     'Arrival Delay in Minutes']
 
-    # Ensure alignment with the model's expected input
-    vectorized_df = vectorized_df.reindex(columns=model.feature_names_in_, fill_value=0)
+    if len(numerical_columns) > 0:
+        try:
+            vectorized_df[numerical_columns] = scaler.transform(df[numerical_columns])
+        except Exception as e:
+            print("Error during scaling numerical columns:", e)
+            print("Numerical columns in input:", df[numerical_columns].columns.tolist())
+            print("Expected numerical columns:", numerical_columns)
+
+
+    # Debug: Print preprocessed data
+    print("Preprocessed DataFrame:")
+    print(vectorized_df.head())
 
     return vectorized_df
 
@@ -75,6 +90,8 @@ def predict():
         return jsonify({'error': 'No input data provided'}), 400
 
     try:
+        print("Expected columns by the vectorizer:", vectorizer.get_feature_names_out())
+
         # Preprocess the input
         preprocessed_data = preprocess_input(input_data)
 
@@ -95,3 +112,7 @@ def predict():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+if __name__ == '__main__':
+    # Run the Flask app
+    app.run(host='0.0.0.0', port=9696)
