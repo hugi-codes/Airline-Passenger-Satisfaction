@@ -248,7 +248,7 @@ print("X_train_preprocessed:", X_train_preprocessed.shape)
 print("X_val_preprocessed:", X_val_preprocessed.shape)
 print("X_test_preprocessed:", X_test_preprocessed.shape)
 
-
+print(X_train_preprocessed)
 
 # ## Modeling
 
@@ -276,6 +276,7 @@ rf_grid_search = GridSearchCV(
     verbose=2
 )
 
+
 # Step 4: Fit GridSearchCV on the training data
 rf_grid_search.fit(X_train_preprocessed, y_train)
 
@@ -295,8 +296,29 @@ print(f"Validation Accuracy: {val_accuracy:.4f}")
 y_test_pred = best_rf_model.predict(X_test_preprocessed)
 test_accuracy = accuracy_score(y_test, y_test_pred)
 
+# checking predict proba values
+predict_proba_values = best_rf_model.predict_proba(X_test_preprocessed)
+# Set the print options to avoid scientific notation
+np.set_printoptions(suppress=True)
+
+# Format the values to be more readable (as percentages, rounded to 2 decimal places)
+formatted_proba_values = np.round(predict_proba_values * 100, 2)
+
+# Print the formatted probability values
+print(formatted_proba_values)
+
 print(f"Test Accuracy: {test_accuracy:.4f}")
 
+# Save the model to a .pkl file
+with open('best_rf_model.pkl', 'wb') as file:
+    pickle.dump(best_rf_model, file)
+
+print("Model has been successfully saved as 'best_rf_model.pkl'.")
+
+
+
+
+print("Now training logistic regression")
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
