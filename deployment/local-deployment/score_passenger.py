@@ -10,7 +10,7 @@ print("test")
 
 airline_passenger_data = {
     "Gender": "Male",
-    "Customer Type": "Loyal Customer",  # You can fill this in with an appropriate value
+    "Customer Type": "Loyal Customer",  
     "Age": 32,
     "Type of Travel": "Business travel",
     "Class": "Business",
@@ -33,11 +33,36 @@ airline_passenger_data = {
     "Arrival Delay in Minutes": 0.0
 }
 
+airline_passenger_data_terrible = {
+    "Gender": "Female",
+    "Customer Type": "Disloyal Customer",  
+    "Age": 45,
+    "Type of Travel": "Personal Travel",
+    "Class": "Economy",
+    "Flight Distance": 3500,
+    "Inflight wifi service": 1,
+    "Departure/Arrival time convenient": 1,
+    "Ease of Online booking": 1,
+    "Gate location": 1,
+    "Food and drink": 1,
+    "Online boarding": 1,
+    "Seat comfort": 1,
+    "Inflight entertainment": 1,
+    "On-board service": 1,
+    "Leg room service": 1,
+    "Baggage handling": 1,
+    "Checkin service": 1,
+    "Inflight service": 1,
+    "Cleanliness": 1,
+    "Departure Delay in Minutes": 120,
+    "Arrival Delay in Minutes": 90.0
+}
+
 
 
 # Send a POST request to the Flask app
 try:
-    response = requests.post(url, json=airline_passenger_data)
+    response = requests.post(url, json=airline_passenger_data_terrible)
     # Check if the request was successful
     if response.status_code == 200:
         print("Response from Flask app:")
