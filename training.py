@@ -309,14 +309,6 @@ print(formatted_proba_values)
 
 print(f"Test Accuracy: {test_accuracy:.4f}")
 
-# Save the model to a .pkl file
-with open('best_rf_model.pkl', 'wb') as file:
-    pickle.dump(best_rf_model, file)
-
-print("Model has been successfully saved as 'best_rf_model.pkl'.")
-
-
-
 
 print("Now training logistic regression")
 from sklearn.linear_model import LogisticRegression
