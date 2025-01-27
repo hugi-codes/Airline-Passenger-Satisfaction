@@ -26,7 +26,7 @@ RUN poetry --version
 COPY pyproject.toml poetry.lock /app/
 
 # Install dependencies using Poetry
-RUN poetry install --no-interaction --no-dev
+RUN poetry install --only=main --no-interaction
 
 # Copy the Flask app and pickle files into the container
 COPY predict.py /app/ 
