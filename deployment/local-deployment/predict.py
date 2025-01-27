@@ -12,32 +12,76 @@ from flask import Flask, request, jsonify
 # Initialize Flask app
 app = Flask(__name__)
 
-# Get the directory of the current script
-script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Load the model and preprocessors
+
+# ================================================================
+# Loading the pkl files: 
+# --> Preprocessors (dict vectorizer and scaler preprocessors)
+# --> Trained model
+
+import pickle
+import os
+
+# Define paths to the pickle files inside the container
+VECTORIZER_PATH = os.path.join(os.getcwd(), "vectorizer.pkl")
+SCALER_PATH = os.path.join(os.getcwd(), "scaler.pkl")
+MODEL_PATH = os.path.join(os.getcwd(), "final_trained_model.pkl")
+
+# Function to load a pickle file
+def load_pickle(file_path):
+    try:
+        with open(file_path, "rb") as file:
+            return pickle.load(file)
+    except FileNotFoundError:
+        raise Exception(f"File not found: {file_path}")
+    except pickle.UnpicklingError:
+        raise Exception(f"Error loading pickle file: {file_path}")
+
+# Load the pickle files
 try:
-    # Load the scaler
-    scaler_path = os.path.join(script_dir, 'scaler.pkl')
-    with open(scaler_path, 'rb') as f:
-        scaler = pickle.load(f)
+    vectorizer = load_pickle(VECTORIZER_PATH)
+    scaler = load_pickle(SCALER_PATH)
+    model = load_pickle(MODEL_PATH)
+    print("All pickle files loaded successfully.")
+except Exception as e:
+    print(f"Error loading pickle files: {e}")
+# ================================================================
 
-    # Load the vectorizer
-    vectorizer_path = os.path.join(script_dir, 'vectorizer.pkl')
-    with open(vectorizer_path, 'rb') as f:
-        vectorizer = pickle.load(f)
+# Uncomment the following code, to read the pkl files from local
+# instead of from inside Docker container. But as the Flask app
+# in this file is intended to be run as a Docker container (therefore,
+# the files are loaded from inside the Docker container instead of from 
+# local) the following commented code does not need to be executed.
+# The code above loads the desired files from inside the container.
 
-    # Load the trained model
-    model_path = os.path.join(script_dir, 'final_trained_model.pkl')  # 'final_trained_model.pkl', best_rf_model
-    with open(model_path, 'rb') as f:
-        model = pickle.load(f)
+# Get the directory of the current script
+# script_dir = os.path.dirname(os.path.abspath(__file__))
 
-    print("Model and preprocessors loaded successfully.")
+# # Load the model and preprocessors
+# try:
+#     # Load the scaler
+#     scaler_path = os.path.join(script_dir, 'scaler.pkl')
+#     with open(scaler_path, 'rb') as f:
+#         scaler = pickle.load(f)
+
+#     # Load the vectorizer
+#     vectorizer_path = os.path.join(script_dir, 'vectorizer.pkl')
+#     with open(vectorizer_path, 'rb') as f:
+#         vectorizer = pickle.load(f)
+
+#     # Load the trained model
+#     model_path = os.path.join(script_dir, 'final_trained_model.pkl')  # 'final_trained_model.pkl', best_rf_model
+#     with open(model_path, 'rb') as f:
+#         model = pickle.load(f)
+
+#     print("Model and preprocessors loaded successfully.")
 
 
-except FileNotFoundError as e:
-    print(f"File not found: {e}")
-    raise
+# except FileNotFoundError as e:
+#     print(f"File not found: {e}")
+#     raise
+
+# ================================================================
 
 # Preprocessing function
 def preprocess_input(data):
