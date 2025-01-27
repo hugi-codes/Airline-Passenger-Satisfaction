@@ -4,9 +4,6 @@ import requests
 url = "http://127.0.0.1:9696/predict"
 
 # Create a sample JSON payload with input data
-# Updated to include categorical columns
-
-print("test")
 
 airline_passenger_data = {
     "Gender": "Male",
