@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 import pandas as pd
 
-# Path to the trained model, scaler, and vectorizer
+# Path to the trained model and preprocessing objects
 model_path = 'deployment/web-deployment/final_trained_model.pkl'
 scaler_path = 'deployment/web-deployment/scaler.pkl'
 vectorizer_path = 'deployment/web-deployment/vectorizer.pkl'
@@ -44,27 +44,24 @@ def get_user_input():
         "Type of Travel": st.sidebar.selectbox("Type of Travel", ["Personal Travel", "Business Travel"]),
         "Class": st.sidebar.selectbox("Class", ["Business", "Eco", "Eco Plus"]),
         "Flight Distance": st.sidebar.number_input("Flight Distance", min_value=0, value=1000),
-        "Inflight wifi service": st.sidebar.slider("Inflight WiFi Service", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Departure/Arrival time convenient": st.sidebar.slider("Departure/Arrival Time Convenient", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Ease of Online booking": st.sidebar.slider("Ease of Online Booking", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Gate location": st.sidebar.slider("Gate Location", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Food and drink": st.sidebar.slider("Food and Drink", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Online boarding": st.sidebar.slider("Online Boarding", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Seat comfort": st.sidebar.slider("Seat Comfort", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Inflight entertainment": st.sidebar.slider("Inflight Entertainment", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "On-board service": st.sidebar.slider("On-board Service", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Leg room service": st.sidebar.slider("Leg Room Service", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Baggage handling": st.sidebar.slider("Baggage Handling", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Checkin service": st.sidebar.slider("Check-in Service", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Inflight service": st.sidebar.slider("Inflight Service", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
-        "Cleanliness": st.sidebar.slider("Cleanliness", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Inflight wifi service": st.sidebar.slider("Inflight WiFi Service", 1, 5, 3),
+        "Departure/Arrival time convenient": st.sidebar.slider("Departure/Arrival Time Convenient", 1, 5, 3),
+        "Ease of Online booking": st.sidebar.slider("Ease of Online Booking", 1, 5, 3),
+        "Gate location": st.sidebar.slider("Gate Location", 1, 5, 3),
+        "Food and drink": st.sidebar.slider("Food and Drink", 1, 5, 3),
+        "Online boarding": st.sidebar.slider("Online Boarding", 1, 5, 3),
+        "Seat comfort": st.sidebar.slider("Seat Comfort", 1, 5, 3),
+        "Inflight entertainment": st.sidebar.slider("Inflight Entertainment", 1, 5, 3),
+        "On-board service": st.sidebar.slider("On-board Service", 1, 5, 3),
+        "Leg room service": st.sidebar.slider("Leg Room Service", 1, 5, 3),
+        "Baggage handling": st.sidebar.slider("Baggage Handling", 1, 5, 3),
+        "Checkin service": st.sidebar.slider("Check-in Service", 1, 5, 3),
+        "Inflight service": st.sidebar.slider("Inflight Service", 1, 5, 3),
+        "Cleanliness": st.sidebar.slider("Cleanliness", 1, 5, 3),
         "Departure Delay in Minutes": st.sidebar.number_input("Departure Delay (Minutes)", min_value=0, value=0),
         "Arrival Delay in Minutes": st.sidebar.number_input("Arrival Delay (Minutes)", min_value=0, value=0)
     }
     return input_data
-
-user_input = get_user_input()
-
 
 # Preprocessing function
 def preprocess_input(data):
@@ -114,22 +111,31 @@ def preprocess_input(data):
 
     return X_preprocessed
 
+# User input
+user_input = get_user_input()
+
 # Predict Button
 if st.sidebar.button("Predict"):
     # Preprocess the user input
-    sample_array = preprocess_input(user_input)
-    
-    # Check the shape of the input array
-    st.write("Shape of input array:", sample_array.shape)
-    
-    # Make prediction
-    y_pred = model.predict(sample_array)
-    
-    # Determine satisfaction
-    satisfaction_label = "Satisfied" if y_pred[0] == 1 else "Not Satisfied"
-    
-    st.success(f"The predicted passenger satisfaction is: **{satisfaction_label}**")
+    preprocessed_data = preprocess_input(user_input)
+
+    # Make a prediction
+    prediction = model.predict(preprocessed_data)
+    prediction_proba = model.predict_proba(preprocessed_data)[:, 1][0]  # Probability of class 1 (satisfaction)
+
+    # Define a threshold (0.5 is the common default threshold for classification problems)
+    threshold = 0.5
+
+    # Map probability to satisfaction status based on the threshold
+    if prediction_proba >= threshold:
+        result = "Passenger is satisfied"
+    else:
+        result = "Passenger is neutral or dissatisfied"
+
+    # Display the result
+    st.success(f"The predicted passenger satisfaction status is: **{result}**")
     st.balloons()
+
 else:
     st.markdown("Enter passenger details in the sidebar and click 'Predict' to see results.")
 
