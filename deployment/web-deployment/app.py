@@ -129,12 +129,12 @@ if st.sidebar.button("Predict"):
     # Map probability to satisfaction status based on the threshold
     if prediction_proba >= threshold:
         result = "Passenger is satisfied"
+        st.success(result)
+        st.balloons()  # Show balloons for satisfied customers
     else:
         result = "Passenger is neutral or dissatisfied"
-
-    # Display the result
-    st.success(f"The predicted passenger satisfaction status is: **{result}**")
-    st.balloons()
+        st.warning(result)  # Show a warning message for neutral/dissatisfied customers
+        st.write("Better luck next time!")  # Optional, customize as needed
 
 else:
     st.markdown("Enter passenger details in the sidebar and click 'Predict' to see results.")
