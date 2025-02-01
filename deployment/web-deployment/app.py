@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 
 # Path to the trained model
-model_path = 'deployment/web_deployment/final_trained_model.pkl'
+model_path = 'deployment/web-deployment/final_trained_model.pkl'
 
 # Load the trained model
 with open(model_path, 'rb') as f_in:
