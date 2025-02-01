@@ -1,13 +1,22 @@
 import streamlit as st
 import pickle
 import numpy as np
+import pandas as pd
 
-# Path to the trained model
+# Path to the trained model, scaler, and vectorizer
 model_path = 'deployment/web-deployment/final_trained_model.pkl'
+scaler_path = 'deployment/web-deployment/scaler.pkl'
+vectorizer_path = 'deployment/web-deployment/vectorizer.pkl'
 
-# Load the trained model
+# Load the trained model, scaler, and vectorizer
 with open(model_path, 'rb') as f_in:
     model = pickle.load(f_in)
+
+with open(scaler_path, 'rb') as f_in:
+    scaler = pickle.load(f_in)
+
+with open(vectorizer_path, 'rb') as f_in:
+    vectorizer = pickle.load(f_in)
 
 # Define the Streamlit App
 st.set_page_config(
@@ -56,11 +65,66 @@ def get_user_input():
 
 user_input = get_user_input()
 
+# Preprocessing function
+def preprocess_input(data):
+    """
+    Preprocess incoming data to align with the model's expectations.
+    Includes:
+    - Vectorization of categorical features
+    - Scaling of numerical features
+    """
+    # Convert incoming data to a DataFrame
+    df = pd.DataFrame([data])
+
+    # Define the numerical and categorical columns
+    numerical_columns = [
+        'Age', 'Flight Distance', 'Inflight wifi service', 
+        'Departure/Arrival time convenient', 'Ease of Online booking', 
+        'Gate location', 'Food and drink', 'Online boarding', 
+        'Seat comfort', 'Inflight entertainment', 'On-board service', 
+        'Leg room service', 'Baggage handling', 'Checkin service', 
+        'Inflight service', 'Cleanliness', 'Departure Delay in Minutes', 
+        'Arrival Delay in Minutes'
+    ]
+
+    categorical_columns = [
+        'Gender', 'Customer Type', 'Type of Travel', 'Class'
+    ]
+
+    # Converting numerical columns to numeric dtype
+    df[numerical_columns] = df[numerical_columns].apply(pd.to_numeric, errors='coerce')
+
+    # Convert categorical columns to 'category' dtype
+    df[categorical_columns] = df[categorical_columns].astype('category')
+
+    # Split the data into numerical and categorical features
+    numerical_data = df[numerical_columns]
+    categorical_data = df[categorical_columns]
+
+    # Preprocess the numerical data (apply scaling)
+    numerical_data_scaled = scaler.transform(numerical_data)
+
+    # Preprocess the categorical data (apply dictionary vectorization)
+    categorical_data_dict = categorical_data.to_dict(orient='records')  # Convert to list of dictionaries
+    categorical_data_vectorized = vectorizer.transform(categorical_data_dict)
+
+    # Stack the preprocessed data (numerical + categorical) horizontally
+    X_preprocessed = np.hstack([numerical_data_scaled, categorical_data_vectorized])
+
+    return X_preprocessed
+
 # Predict Button
 if st.sidebar.button("Predict"):
-    sample_array = np.array([list(user_input.values())])
+    # Preprocess the user input
+    sample_array = preprocess_input(user_input)
+    
+    # Check the shape of the input array
+    st.write("Shape of input array:", sample_array.shape)
+    
+    # Make prediction
     y_pred = model.predict(sample_array)
     
+    # Determine satisfaction
     satisfaction_label = "Satisfied" if y_pred[0] == 1 else "Not Satisfied"
     
     st.success(f"The predicted passenger satisfaction is: **{satisfaction_label}**")
