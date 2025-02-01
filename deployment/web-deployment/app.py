@@ -44,26 +44,27 @@ def get_user_input():
         "Type of Travel": st.sidebar.selectbox("Type of Travel", ["Personal Travel", "Business Travel"]),
         "Class": st.sidebar.selectbox("Class", ["Business", "Eco", "Eco Plus"]),
         "Flight Distance": st.sidebar.number_input("Flight Distance", min_value=0, value=1000),
-        "Inflight wifi service": st.sidebar.slider("Inflight WiFi Service", 0, 5, 3),
-        "Departure/Arrival time convenient": st.sidebar.slider("Departure/Arrival Time Convenient", 0, 5, 3),
-        "Ease of Online booking": st.sidebar.slider("Ease of Online Booking", 0, 5, 3),
-        "Gate location": st.sidebar.slider("Gate Location", 0, 5, 3),
-        "Food and drink": st.sidebar.slider("Food and Drink", 0, 5, 3),
-        "Online boarding": st.sidebar.slider("Online Boarding", 0, 5, 3),
-        "Seat comfort": st.sidebar.slider("Seat Comfort", 0, 5, 3),
-        "Inflight entertainment": st.sidebar.slider("Inflight Entertainment", 0, 5, 3),
-        "On-board service": st.sidebar.slider("On-board Service", 0, 5, 3),
-        "Leg room service": st.sidebar.slider("Leg Room Service", 0, 5, 3),
-        "Baggage handling": st.sidebar.slider("Baggage Handling", 0, 5, 3),
-        "Checkin service": st.sidebar.slider("Check-in Service", 0, 5, 3),
-        "Inflight service": st.sidebar.slider("Inflight Service", 0, 5, 3),
-        "Cleanliness": st.sidebar.slider("Cleanliness", 0, 5, 3),
+        "Inflight wifi service": st.sidebar.slider("Inflight WiFi Service", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Departure/Arrival time convenient": st.sidebar.slider("Departure/Arrival Time Convenient", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Ease of Online booking": st.sidebar.slider("Ease of Online Booking", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Gate location": st.sidebar.slider("Gate Location", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Food and drink": st.sidebar.slider("Food and Drink", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Online boarding": st.sidebar.slider("Online Boarding", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Seat comfort": st.sidebar.slider("Seat Comfort", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Inflight entertainment": st.sidebar.slider("Inflight Entertainment", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "On-board service": st.sidebar.slider("On-board Service", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Leg room service": st.sidebar.slider("Leg Room Service", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Baggage handling": st.sidebar.slider("Baggage Handling", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Checkin service": st.sidebar.slider("Check-in Service", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Inflight service": st.sidebar.slider("Inflight Service", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
+        "Cleanliness": st.sidebar.slider("Cleanliness", 1, 5, 3),  # Changed slider range from 0-5 to 1-5
         "Departure Delay in Minutes": st.sidebar.number_input("Departure Delay (Minutes)", min_value=0, value=0),
         "Arrival Delay in Minutes": st.sidebar.number_input("Arrival Delay (Minutes)", min_value=0, value=0)
     }
     return input_data
 
 user_input = get_user_input()
+
 
 # Preprocessing function
 def preprocess_input(data):
