@@ -124,7 +124,7 @@ if st.sidebar.button("Predict"):
     prediction_proba = model.predict_proba(preprocessed_data)[:, 1][0]  # Probability of class 1 (satisfaction)
 
     # Define a threshold (0.5 is the common default threshold for classification problems)
-    threshold = 0.5
+    threshold = 0.4
 
     # Map probability to satisfaction status based on the threshold
     if prediction_proba >= threshold:
