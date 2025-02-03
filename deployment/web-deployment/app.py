@@ -29,7 +29,7 @@ st.set_page_config(
 st.title("✈️ Airline Passenger Satisfaction Predictor")
 st.markdown("""
 This app predicts passenger satisfaction based on flight experience.
-Simply enter the details below and get insights into the predicted satisfaction level.
+Simply enter the details below and get insights into the predicted satisfaction level!
 """)
 
 # Sidebar Input Fields
