@@ -1,7 +1,12 @@
-# Airline-Passenger-Satisfaction
-This repo is work in progress. It is the final project of the [Machine Learning Zoomcamp](https://github.com/DataTalksClub/machine-learning-zoomcamp) offered by [Data Talks Club](https://datatalks.club/). For more information on the expected deliverables, please see [this file](https://github.com/DataTalksClub/machine-learning-zoomcamp/tree/master/projects). Please see my Machine Learning Zoomcamp [repo](https://github.com/hugi-codes/Machine-Learning-Zoomcamp/tree/main) for information on the course syllabus and course homework.
+# ✈️ Airline-Passenger-Satisfaction
+This repo represents the final project of the [Machine Learning Zoomcamp](https://github.com/DataTalksClub/machine-learning-zoomcamp) offered by [Data Talks Club](https://datatalks.club/). For more information on the expected deliverables, please see [this file](https://github.com/DataTalksClub/machine-learning-zoomcamp/tree/master/projects). Please see my Machine Learning Zoomcamp [repo](https://github.com/hugi-codes/Machine-Learning-Zoomcamp/tree/main) for information on the course syllabus and course homework.
 
-## Problem Description
+🎉 Live Streamlit App
+
+You can check out the live version of the Streamlit app here: [Streamlit App](https://airline-passenger-satisfaction-h9xpcyhyboangktpbakp9g.streamlit.app/)
+
+
+## Problem Description 
 This project focuses on analyzing airline passenger satisfaction based on a dataset derived from a customer satisfaction survey. The dataset includes various attributes such as demographic details, travel characteristics, and passenger ratings on different aspects of their journey (e.g., inflight services, seat comfort, and cleanliness).
 
 The primary objective is to identify the key factors influencing passenger satisfaction and develop a classification model to predict whether a passenger is satisfied or neutral / dissatisfied. Insights from this analysis can help airlines improve service quality and enhance customer experiences.
@@ -35,24 +40,52 @@ Info on the features (copied from Kaggle):
 - **Satisfaction**: Airline satisfaction level. This is the target feature. (**Satisfaction**, **Neutral or Dissatisfaction**)  
 
 
-
-
-
 ## Setup to reproduce the project
 
-1) Clone this git repository
-- add commands
+#### Clone this Git Repository
+```sh
+git clone <repository-url>
+cd <repository-name>
+```
 
-2) Dependency management with Poetry
-- add instructions on how to install poetry, create poetry env and install dependencies of this project
+#### Dependency Management with Poetry
 
-3) Install Docker
-- Needed for Deployment
-- More info in Deployment directory
+Install Poetry if you haven't already:
+```sh
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+Create a virtual environment and install dependencies:
+```sh
+poetry install
+```
+
+Activate the virtual environment:
+```sh
+poetry shell
+```
+
+#### Install Docker
+Docker is required for deployment. Install it using the official instructions:
+
+For Linux:
+```sh
+sudo apt-get update
+sudo apt-get install -y docker.io
+```
+
+For macOS (using Homebrew):
+```sh
+brew install --cask docker
+```
+
+For Windows:
+Download and install Docker Desktop from [Docker's official website](https://www.docker.com/products/docker-desktop).
+
 
 ## Deployment
 For this project I decided to explore two different approaches to deployment:
 1) Local deployment with Docker and Flask
 2) Web deployment with Docker and Streamlit (Free Streamlit Community Cloud)
 
-Add more info once deployment is done
+More details are available in the respective folders, inside the `deployment` directory.
